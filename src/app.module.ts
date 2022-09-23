@@ -4,6 +4,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { MapModule } from './map/map.module';
 import { ConfigModule } from '@nestjs/config';
+import { PolygonModule } from './polygon/polygon.module';
 
 @Module({
   imports: [ConfigModule.forRoot({ isGlobal: true }),
@@ -21,7 +22,7 @@ import { ConfigModule } from '@nestjs/config';
       database: process.env.POSTGRES_DATABASE,
       autoLoadEntities: true,
       synchronize: true,
-    }),MapModule],
+    }),MapModule,PolygonModule],
     
   controllers: [AppController],
   providers: [AppService],
