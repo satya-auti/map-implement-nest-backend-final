@@ -2,34 +2,29 @@ import { Injectable } from '@nestjs/common';
 import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
 import { Point } from 'geojson';
 import { from, Observable } from 'rxjs';
-import { DataSource, Repository } from 'typeorm';
-import { MapEntity } from './entity/map.entity';
-import { Map } from './entity/map.interface';
-import { MapModel } from './entity/map.model';
+import {  Repository } from 'typeorm';
+import { PolygonEntity } from './entity/polygon.entity';
+import { Polygon } from './entity/polygon.interface';
+import { PolygonModel } from './entity/polygon.model';
 
 @Injectable()
-export class MapService {
+export class PolygonService {
 constructor(
-    @InjectRepository(MapEntity)
-    private readonly mapRepository: Repository<MapEntity>,
+    @InjectRepository(PolygonEntity)
+    private readonly polygonRepository: Repository<PolygonEntity>,
 
-    // @InjectDataSource() 
-    // private dataSource: DataSource,
-
-    // @InjectConnection() 
-    // private readonly connection: Connection
 ){}
 
  proj:any = 4326;
  id:number;
- lat:number;
- lon:number;
+ name:string;
+//  geom:Polygon;
 
-    findAllMapData(): Observable<Map[]>{
-        return from(this.mapRepository.find());
+    findAllPolygonData(): Observable<PolygonEntity[]>{
+        return from(this.polygonRepository.find());
     }
 
-    createMapData(mapModel:MapModel): Observable<MapEntity> {
+    createPolygonData(polygonModel:PolygonModel): Observable<PolygonEntity> {
     // createMapData(mapModel:MapModel): Promise<Map> {
         
         // let dataGeom:Point = { 
@@ -40,11 +35,11 @@ constructor(
         //         ]
         // };
 
-        let dummy = new MapEntity();
-        dummy.lat = mapModel.lat;
-        dummy.lon = mapModel.lon;
-        dummy.name = mapModel.name;
-        dummy.city = mapModel.city;
+        let dummy = new PolygonEntity();
+        // dummy.lat = polygonModel.lat;
+        // dummy.lon = polygonModel.lon;
+        // dummy.name = polygonModel.name;
+        // dummy.city = polygonModel.city;
         // dummy.geom = dataGeom;
                 // dummy.geom.type = "Point";
                 // dummy.geom.coordinates = [
@@ -55,14 +50,16 @@ constructor(
         // ST_SetSRID(ST_MakePoint(-71.1043443253471, 42.3150676015829),4326);
         console.log("dummy-data ",dummy );
         
-        console.log("data",mapModel);
+        console.log("data",polygonModel);
 
-         from(this.mapRepository.save(mapModel).then( res => {
+         from(this.polygonRepository.save(polygonModel).then( res => {
                 console.log("hited", res);
                 
                 this.id = res.id ;
-                this.lat = parseFloat(res.lat);
-                this.lon = parseFloat(res.lon);
+                this.name = res.name;
+                // this.geom = res.geom;
+                // this.lat = parseFloat(res.lat);
+                // this.lon = parseFloat(res.lon);
                 // this.doSomeQuery();
                 // this.UpdatePoint();
                 // this.dataSource.query(`UPDATE map_data SET geom = ST_SetSRID(ST_MakePoint(${this.lat}, ${this.lon}),${this.proj}) WHERE id=${this.id}`);
